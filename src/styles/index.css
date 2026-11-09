@@ -1,0 +1,179 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Onest Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Funnel Display Variable', 'Onest Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-graphite-950: #0b0d0c;
+  --color-graphite-900: #131614;
+  --color-graphite-850: #191d1b;
+  --color-graphite-800: #252c29;
+  --color-graphite-700: #38423e;
+  --color-graphite-600: #505b57;
+  --color-graphite-500: #6b7672;
+  --color-graphite-400: #9aa4a0;
+  --color-graphite-300: #c3cac7;
+  --color-graphite-200: #dfe3e1;
+  --color-graphite-100: #edf0ee;
+  --color-graphite-50: #f6f8f7;
+
+  --color-green-200: #c8fabb;
+  --color-green-300: #8ef56a;
+  --color-green-400: #55e83a;
+  --color-green-500: #2fd01f;
+  --color-green-600: #23a81a;
+  --color-green-700: #167c13;
+  --color-green-800: #126013;
+  --color-green-900: #0e4611;
+
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-fade-up: fade-up 0.45s var(--ease-brand) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 4.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white font-sans text-graphite-950 antialiased;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-green-500);
+    outline-offset: 3px;
+  }
+
+  button,
+  [role='tab'],
+  summary {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: var(--color-green-400);
+    color: var(--color-graphite-950);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Entrada dos blocos durante a rolagem. Sem JavaScript, nada fica oculto. */
+.js [data-reveal='pending'] {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+[data-reveal] {
+  transition:
+    opacity 0.8s var(--ease-brand) var(--reveal-delay, 0ms),
+    transform 0.8s var(--ease-brand) var(--reveal-delay, 0ms);
+}
+
+.js [data-reveal-variant='line'][data-reveal='pending'] {
+  opacity: 1;
+  transform: scaleX(0);
+}
+
+[data-reveal-variant='line'] {
+  transform-origin: left;
+  transition-duration: 1.4s;
+}
+
+/* Barras de sinal: a onda sonora da marca, que cresce como o negócio. */
+.signal-bar {
+  transform-origin: bottom;
+  transform: scaleY(var(--bar-height));
+  animation:
+    signal-rise 1.1s var(--ease-brand) var(--bar-rise-delay) backwards,
+    signal-breathe var(--bar-duration) ease-in-out calc(1.1s + var(--bar-rise-delay)) infinite alternate;
+}
+
+.signal-paused .signal-bar {
+  animation-play-state: paused;
+}
+
+@keyframes signal-rise {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes signal-breathe {
+  to {
+    transform: scaleY(calc(var(--bar-height) * 0.8));
+  }
+}
+
+/* Pulso que percorre as conexões da ilustração de automações. */
+.flow-line {
+  stroke-dasharray: 8 200;
+  animation: flow-travel 3.6s linear infinite;
+}
+
+@keyframes flow-travel {
+  from {
+    stroke-dashoffset: 208;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 80% 75% at 70% 35%, black 10%, transparent 75%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .js [data-reveal='pending'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js [data-reveal-variant='line'][data-reveal='pending'] {
+    transform: none;
+  }
+}
